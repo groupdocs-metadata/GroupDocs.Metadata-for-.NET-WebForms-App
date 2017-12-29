@@ -5,30 +5,30 @@ html, body
     padding: 0;
 }
 
-#filesList
+table
 {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
 
-    #filesList td, #filesList th
+    table td, th
     {
         border: 1px solid #ddd;
         padding: 8px;
     }
 
-    #filesList tr:nth-child(even)
+    table tr:nth-child(even)
     {
         background-color: #f2f2f2;
     }
 
-    #filesList tr:hover
+    table tr:hover
     {
         background-color: #ddd;
     }
 
-    #filesList th
+    table th
     {
         padding-top: 12px;
         padding-bottom: 12px;
@@ -41,4 +41,14 @@ html, body
 {
     cursor: pointer;
     color: #0e1196;
+}
+
+input[type=text]
+{
+    width:100%;
+}
+
+input[type=text]:focus 
+{
+     background-color: rgba(203, 251, 244, 0.65);
 }

@@ -1,9 +1,9 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="Metadata_Editor_Modren_UI._default" %>
 
-  <!DOCTYPE html>
-  <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-  <head>
+<head>
     <title>GroupDocs.Metadata for .NET (Web Forms)</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,11 +17,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
     <script src="Content/custom.js"></script>
     <script src="/Content/app.js"></script>
-  </head>
+</head>
 
-  <body>
+<body>
     <div ng-app="GroupDocsMetadata" ng-cloak flex layout="column" style="height: 100%;">
-      <md-toolbar ng-controller="ToolbarController" layout="row" hide-print md-whiteframe="4" class="md-toolbar-tools md-scroll-shrink">
+        <md-toolbar ng-controller="ToolbarController" layout="row" hide-print md-whiteframe="4" class="md-toolbar-tools md-scroll-shrink">
 
         <a href="/"><img src="/Content/GDVLogo.png" /></a>&nbsp; <a href="/"><h1>Metadata for .NET (Web Forms)</h1></a>
         <span flex></span>
@@ -49,23 +49,37 @@
           <md-icon>more_vert</md-icon>
         </md-button>
       </md-toolbar>
-      <md-content flex layout="row" md-scroll-y>
+        <md-content flex layout="row" md-scroll-y>
         <md-content flex id="content" class="md-padding" role="main">
           <md-card>
-            <md-card-title>
-              <md-card-title-text><span class="md-headline">File: {{ selectedFile }}</span></md-card-title-text>
-            </md-card-title>
             <md-card-title-media>
               <div class="md-media-lg card-media md-padding">
-                <div>Metadata fields...</div>
+<h1>Metadata Details: {{ selectedFile }}</h1>
+                                                            <div ng-controller="MetadataController">
+                          <div class="md-media-lg card-media md-padding">
+                            <table>
+                              <tr>
+                                <th style="text-align:center;">#</th>
+                                <th>Property</th>
+                                  <th>Value</th>
+                              </tr>
+                              <tr ng-repeat="item in MetadataProperties | orderBy:'Name'" ng-value="item">
+                                <td align="center">{{$index + 1}}</td>
+                                <td><span class="fileLink">{{ item.Name }}</span></td>
+                                  <td><input type="text" readonly value="{{ item.Value }}" /></td>
+                              </tr>
+                            </table>
+                          </div>
+                        </div>
+
               </div>
             </md-card-title-media>
           </md-card>
         </md-content>
       </md-content>
-      <div style="visibility: hidden">
-        <div class="md-dialog-container" id="fuDialog">
-          <md-dialog aria-label="File Manager">
+        <div style="visibility: hidden">
+            <div class="md-dialog-container" id="fuDialog">
+                <md-dialog aria-label="File Manager">
             <md-toolbar>
               <div class="md-toolbar-tools">
                 <h2><md-icon md-menu-origin md-menu-align-target>library_books</md-icon> File Manager</h2>
@@ -88,7 +102,7 @@
                         <div ng-controller="ToolbarController">
 
                           <div class="md-media-lg card-media md-padding">
-                            <input type="file" id="file" name="file" multiple onchange="angular.element(this).scope().getFileDetails(this)" />
+                            <input type="file" id="file" name="file" accept=".png,.gif,.jpeg,.bmp,.doc,.docx,.xls,.xlsx,.pdf" onchange="angular.element(this).scope().getFileDetails(this)" />
 
                             <md-button class="md-raised md-primary" ng-click="uploadFiles()">
                               <md-icon md-menu-origin md-menu-align-target>file_upload</md-icon>
@@ -100,9 +114,6 @@
                               <md-progress-linear md-mode="indeterminate" determinateValue="0" determinateValue2="0"></md-progress-linear>
                             </p>
 
-                            <p style="display:none">
-                              <progress id="pro" value="0"></progress>
-                            </p>
                           </div>
                         </div>
                       </md-card-title-media>
@@ -140,8 +151,8 @@
               </md-tabs>
             </md-dialog-content>
           </md-dialog>
+            </div>
         </div>
-      </div>
     </div>
-  </body>
-  </html>
+</body>
+</html>

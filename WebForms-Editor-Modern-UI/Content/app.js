@@ -17,10 +17,18 @@ ngApp.factory('FilesFactory', function ($resource) {
     });
 });
 
-ngApp.controller('ToolbarController', function ToolbarController($rootScope, $scope, $mdSidenav, ShowHideTools, FilePath, $mdDialog, FilesFactory, tabselectedIndex) {
+ngApp.factory('MetadataPropertyFactory', function ($resource) {
+    return $resource('/MetadataProperty?file=:filename', {}, {
+        query: {
+            method: 'GET',
+            isArray: true
+        }
+    });
+});
+
+ngApp.controller('ToolbarController', function ToolbarController($rootScope, $scope, $mdSidenav, ShowHideTools, FilePath, $mdDialog, FilesFactory, tabselectedIndex, MetadataPropertyFactory) {
     $rootScope.tabselectedIndex = tabselectedIndex;
     $scope.showTabDialog = function (ev) {
-        $rootScope.list = FilesFactory.query();
         $mdDialog.show({
             controller: DialogController,
             contentElement: '#fuDialog',
@@ -84,7 +92,6 @@ ngApp.controller('ToolbarController', function ToolbarController($rootScope, $sc
     function updateProgress(e) {
         if (e.lengthComputable) {
             document.getElementById('progress').style.display = 'block';
-            document.getElementById('pro').setAttribute('value', e.loaded);
             document.getElementById('progress').setAttribute('max', e.total);
         }
     };
@@ -111,18 +118,30 @@ ngApp.controller('ToolbarController', function ToolbarController($rootScope, $sc
 
     $scope.nextDocument = function () {
         if ($rootScope.list.indexOf($rootScope.selectedFile) + 1 == $rootScope.list.length) {
+            $rootScope.MetadataProperties = MetadataPropertyFactory.query({
+                filename: $rootScope.list[0]
+            });
             $rootScope.$broadcast('selected-file-changed', $rootScope.list[0]);
         }
         else {
+            $rootScope.MetadataProperties = MetadataPropertyFactory.query({
+                filename: $rootScope.list[$rootScope.list.indexOf($rootScope.selectedFile) + 1]
+            });
             $rootScope.$broadcast('selected-file-changed', $rootScope.list[$rootScope.list.indexOf($rootScope.selectedFile) + 1]);
         }
     };
 
     $scope.previousDocument = function () {
         if ($rootScope.list.indexOf($rootScope.selectedFile) - 1 == -1) {
+            $rootScope.MetadataProperties = MetadataPropertyFactory.query({
+                filename: $rootScope.list[$rootScope.list.length - 1]
+            });
             $rootScope.$broadcast('selected-file-changed', $rootScope.list[$rootScope.list.length - 1]);
         }
         else {
+            $rootScope.MetadataProperties = MetadataPropertyFactory.query({
+                filename: $rootScope.list[$rootScope.list.indexOf($rootScope.selectedFile) - 1]
+            });
             $rootScope.$broadcast('selected-file-changed', $rootScope.list[$rootScope.list.indexOf($rootScope.selectedFile) - 1]);
         }
     };
@@ -130,13 +149,8 @@ ngApp.controller('ToolbarController', function ToolbarController($rootScope, $sc
 });
 
 
-ngApp.controller('AvailableFilesController', function AvailableFilesController($rootScope, $scope, FilesFactory, FilePath, $mdDialog) {
+ngApp.controller('AvailableFilesController', function AvailableFilesController($rootScope, $scope, FilesFactory, FilePath, $mdDialog, MetadataPropertyFactory) {
     $rootScope.list = FilesFactory.query();
-    if (FilePath) {
-        $rootScope.list = [FilePath];
-        $rootScope.selectedFile = $rootScope.list[0];
-        $rootScope.$broadcast('selected-file-changed', $rootScope.selectedFile);
-    }
 
     $scope.onOpen = function () {
         $rootScope.list = FilesFactory.query();
@@ -144,6 +158,19 @@ ngApp.controller('AvailableFilesController', function AvailableFilesController($
     };
     $scope.onChange = function (item) {
         $mdDialog.hide();
+        $rootScope.MetadataProperties = MetadataPropertyFactory.query({
+            filename: item
+        });
+
         $rootScope.$broadcast('selected-file-changed', item);
     };
+});
+
+ngApp.controller('MetadataController', function MetadataController($rootScope, $scope, MetadataPropertyFactory, FilePath, $mdDialog) {
+    if (FilePath) {
+        $rootScope.selectedFile = FilePath;
+        $rootScope.MetadataProperties = MetadataPropertyFactory.query({
+            filename: FilePath
+        });
+    }
 });
