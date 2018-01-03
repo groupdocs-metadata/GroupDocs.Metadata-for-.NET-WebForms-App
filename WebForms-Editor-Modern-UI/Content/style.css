@@ -1,0 +1,54 @@
+html, body
+{
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+table
+{
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+    table td, th
+    {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    table tr:nth-child(even)
+    {
+        background-color: #f2f2f2;
+    }
+
+    table tr:hover
+    {
+        background-color: #ddd;
+    }
+
+    table th
+    {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #080b85;
+        color: white;
+    }
+
+.fileLink
+{
+    cursor: pointer;
+    color: #0e1196;
+}
+
+input[type=text]
+{
+    width:100%;
+}
+
+input[type=text]:focus 
+{
+     background-color: rgba(203, 251, 244, 0.65);
+}
