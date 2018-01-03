@@ -20,7 +20,9 @@ namespace Metadata_Editor_Modren_UI
         {
             try
             {
-                FileFormatChecker fileFormatChecker = new FileFormatChecker(Utils._storagePath + "\\" + file);
+                FileStream original = File.OpenRead(Utils._storagePath + "\\" + file);
+                FileFormatChecker fileFormatChecker = new FileFormatChecker(original);
+
                 DocumentType documentType = fileFormatChecker.GetDocumentType();
                 List<PropertyItem> values = new List<PropertyItem>();
 
@@ -30,21 +32,21 @@ namespace Metadata_Editor_Modren_UI
                     {
                         case DocumentType.Doc:
 
-                            DocFormat docFormat = new DocFormat(Utils._storagePath + "\\" + file);
+                            DocFormat docFormat = new DocFormat(original);
                             values = AppendMetadata(docFormat.GetMetadata(), values);
 
                             break;
 
                         case DocumentType.Xls:
 
-                            XlsFormat xlsFormat = new XlsFormat(Utils._storagePath + "\\" + file);
+                            XlsFormat xlsFormat = new XlsFormat(original);
                             values = AppendMetadata(xlsFormat.GetMetadata(), values);
 
                             break;
 
                         case DocumentType.Pdf:
 
-                            PdfFormat pdfFormat = new PdfFormat(Utils._storagePath + "\\" + file);
+                            PdfFormat pdfFormat = new PdfFormat(original);
                             values = AppendMetadata(pdfFormat.GetMetadata(), values);
                             values = AppendXMPData(pdfFormat.GetXmpData(), values);
 
@@ -52,7 +54,7 @@ namespace Metadata_Editor_Modren_UI
 
                         case DocumentType.Png:
 
-                            PngFormat pngFormat = new PngFormat(Utils._storagePath + "\\" + file);
+                            PngFormat pngFormat = new PngFormat(original);
                             values = AppendMetadata(pngFormat.GetMetadata(), values);
                             values = AppendXMPData(pngFormat.GetXmpData(), values);
 
@@ -60,7 +62,7 @@ namespace Metadata_Editor_Modren_UI
 
                         case DocumentType.Jpeg:
 
-                            JpegFormat jpegFormat = new JpegFormat(Utils._storagePath + "\\" + file);
+                            JpegFormat jpegFormat = new JpegFormat(original);
                             values = AppendMetadata(jpegFormat.GetMetadata(), values);
                             values = AppendXMPData(jpegFormat.GetXmpData(), values);
 
@@ -68,7 +70,7 @@ namespace Metadata_Editor_Modren_UI
 
                         case DocumentType.Gif:
 
-                            GifFormat gifFormat = new GifFormat(Utils._storagePath + "\\" + file);
+                            GifFormat gifFormat = new GifFormat(original);
                             values = AppendMetadata(gifFormat.GetMetadata(), values);
                             values = AppendXMPData(gifFormat.GetXmpData(), values);
 
@@ -76,34 +78,18 @@ namespace Metadata_Editor_Modren_UI
 
                         case DocumentType.Bmp:
 
-                            BmpFormat bmpFormat = new BmpFormat(Utils._storagePath + "\\" + file);
+                            BmpFormat bmpFormat = new BmpFormat(original);
                             values = AppendMetadata(bmpFormat.GetMetadata(), values);
 
                             break;
 
                         default:
 
-                            DocFormat defaultDocFormat = new DocFormat(Utils._storagePath + "\\" + file);
+                            DocFormat defaultDocFormat = new DocFormat(original);
                             values = AppendMetadata(defaultDocFormat.GetMetadata(), values);
 
                             break;
                     }
-
-                    //DataSet ds = null;
-                    //ds = ExportFacade.ExportToDataSet(Utils._storagePath + "\\" + file);
-
-                    //if (ds.Tables.Count > 0)
-                    //{
-                    //    for (int i = 0; i < ds.Tables.Count; i++)
-                    //    {
-                    //        DataTable table = ds.Tables[i];
-
-                    //        foreach (DataRow dr in table.Rows)
-                    //        {
-                    //            values.Add(new PropertyItem(dr[0].ToString(), dr[1].ToString(), false));
-                    //        }
-                    //    }
-                    //}
 
                     return Json(values);
                 }
@@ -138,6 +124,8 @@ namespace Metadata_Editor_Modren_UI
         {
             if (xmpMetadata != null)
             {
+                PropertyItem propertyItem;
+
                 foreach (XmpPackage package in xmpMetadata.Packages)
                 {
                     foreach (KeyValuePair<string, XmpValueBase> pair in package)
@@ -148,20 +136,36 @@ namespace Metadata_Editor_Modren_UI
 
                         if (xmpArray != null)
                         {
-                            values.Add(new PropertyItem(pair.Key, pair.Key, false));
+                            propertyItem = new PropertyItem(pair.Key, pair.Key, false);
+                            if (!values.Contains(propertyItem))
+                            {
+                                values.Add(propertyItem);
+                            }
+
                             foreach (string arrayItem in xmpArray.Values)
                             {
-                                values.Add(new PropertyItem(arrayItem, arrayItem, false));
+                                propertyItem = new PropertyItem(arrayItem, arrayItem, false);
+                                if (!values.Contains(propertyItem))
+                                {
+                                    values.Add(propertyItem);
+                                }
                             }
                         }
                         else if (langAlt != null)
                         {
-                            values.Add(new PropertyItem(pair.Key + langAlt.ToString(), langAlt.ToString(), false));
+                            propertyItem = new PropertyItem(pair.Key + langAlt.ToString(), langAlt.ToString(), false);
+                            if (!values.Contains(propertyItem))
+                            {
+                                values.Add(propertyItem);
+                            }
                         }
                         else
                         {
-                            string xmpProperty = string.Format("{0} - {1}", pair.Key, pair.Value.ToString());
-                            values.Add(new PropertyItem(pair.Key, xmpProperty, false));
+                            propertyItem = new PropertyItem(pair.Key, pair.Value.ToString(), false);
+                            if (!values.Contains(propertyItem))
+                            {
+                                values.Add(propertyItem);
+                            }
                         }
                     }
                 }

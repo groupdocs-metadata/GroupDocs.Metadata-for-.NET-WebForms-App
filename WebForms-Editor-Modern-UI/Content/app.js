@@ -26,7 +26,7 @@ ngApp.factory('MetadataPropertyFactory', function ($resource) {
     });
 });
 
-ngApp.controller('ToolbarController', function ToolbarController($rootScope, $scope, $mdSidenav, ShowHideTools, FilePath, $mdDialog, FilesFactory, tabselectedIndex, MetadataPropertyFactory) {
+ngApp.controller('ToolbarController', function ToolbarController($rootScope, $sce, $scope, $mdSidenav, ShowHideTools, FilePath, $mdDialog, FilesFactory, tabselectedIndex, MetadataPropertyFactory) {
     $rootScope.tabselectedIndex = tabselectedIndex;
     $scope.showTabDialog = function (ev) {
         $mdDialog.show({
@@ -144,6 +144,12 @@ ngApp.controller('ToolbarController', function ToolbarController($rootScope, $sc
             });
             $rootScope.$broadcast('selected-file-changed', $rootScope.list[$rootScope.list.indexOf($rootScope.selectedFile) - 1]);
         }
+    };
+
+    $scope.cleamDocument = function () {
+        //$sce.trustAsResourceUrl('/CleanMetadata?file=' + $rootScope.selectedFile);
+        //$rootScope.list = FilesFactory.query();
+        //$rootScope.$broadcast('selected-file-changed', 'Cleaned_' + $rootScope.selectedFile);
     };
 
 });

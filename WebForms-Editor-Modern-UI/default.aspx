@@ -25,6 +25,11 @@
 
         <a href="/"><img src="/Content/GDVLogo.png" /></a>&nbsp; <a href="/"><h1>Metadata for .NET (Web Forms)</h1></a>
         <span flex></span>
+            <md-button class="button" ng-href="/CleanMetadata?file={{ selectedFile }}" ng-click="cleamDocument()" ng-disabled="!selectedFile" ng-hide="ShowHideTools.ShowDownloads">
+          <md-icon md-menu-origin md-menu-align-target>clear</md-icon>Clean Metadata
+          <md-tooltip>Clean Metadata & Download Updated File</md-tooltip>
+
+        </md-button>
         <md-button class="md-icon-button" ng-click="showTabDialog($event)" ng-hide="ShowHideTools.IsFileSelection">
           <md-icon md-menu-origin md-menu-align-target>library_books</md-icon>
 
@@ -42,7 +47,7 @@
 
         <md-button class="md-icon-button" ng-href="/downloadoriginal?file={{ selectedFile }}" ng-disabled="!selectedFile" ng-hide="ShowHideTools.ShowDownloads">
           <md-icon md-menu-origin md-menu-align-target>file_download</md-icon>
-          <md-tooltip>Download File</md-tooltip>
+          <md-tooltip>Download Original File</md-tooltip>
 
         </md-button>
         <md-button class="md-icon-button">
