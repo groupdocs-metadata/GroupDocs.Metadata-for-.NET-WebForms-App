@@ -1,7 +1,6 @@
 # GroupDocs.Metadata for .NET - ASP.NET WebForms Document Metadata Editor App
 
-
-GroupDocs.Metadata for .NET - ASP.Net WebForms Document Metadata Editor App provides easy ways to manage metadata in various formats. It enables user to read, write, update and remove the metadata of documents (word, spreadsheet, presentation, pdf) and images (jpeg, png, gif).
+GroupDocs.Metadata for .NET - ASP.Net WebForms Document Metadata Editor App provides easy ways to manage metadata in various formats. It enables user to read, write, update and remove the metadata of documents (word, spreadsheet, presentation, PDF) and images (JPEG, png, GIF).
 
 ![GroupDocs.Metadata for .NET WebForms Editor](https://github.com/groupdocs-metadata/GroupDocs.Metadata-for-.NET-WebForms-App/blob/master/WebForms-Editor-Modern-UI/App_Data/GroupDocs-Metadata-WebForms-Screenshot.png)
 
