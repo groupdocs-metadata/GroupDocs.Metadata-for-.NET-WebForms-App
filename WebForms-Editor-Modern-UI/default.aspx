@@ -44,11 +44,30 @@
           <md-icon>navigate_next</md-icon>
           <md-tooltip>Next Document</md-tooltip>
         </md-button>
-
+        
+        <md-menu>
+        <md-button class="md-icon-button" ng-click="this.openMenu($mdOpenMenu, $event)">
+          <md-icon>save</md-icon>
+          <md-tooltip>Export Metadata</md-tooltip>
+        </md-button>
+        <md-menu-content width="4">
+          <md-menu-item ng-hide="ShowHideTools.IsShowDownloads">
+            <md-button ng-href="/ExportMetadata?isExcel=true&file={{ selectedFile }}" ng-click="exportDocument()" target="_blank" ng-disabled="!selectedFile">
+              <md-icon md-menu-origin md-menu-align-target>file_download</md-icon>
+              Export Metadata to Excel
+            </md-button>
+          </md-menu-item>
+          <md-menu-item ng-hide="ShowHideTools.IsShowDownloads">
+            <md-button ng-href="/ExportMetadata?isExcel=false&file={{ selectedFile }}" ng-click="exportDocument()" target="_blank" ng-disabled="!selectedFile">
+              <md-icon md-menu-origin md-menu-align-target>file_download</md-icon>
+              Export Metadata to CSV
+            </md-button>
+          </md-menu-item>         
+        </md-menu-content>
+      </md-menu>
         <md-button class="md-icon-button" ng-href="/downloadoriginal?file={{ selectedFile }}" ng-disabled="!selectedFile" ng-hide="ShowHideTools.ShowDownloads">
           <md-icon md-menu-origin md-menu-align-target>file_download</md-icon>
           <md-tooltip>Download Original File</md-tooltip>
-
         </md-button>
         <md-button class="md-icon-button">
           <md-icon>more_vert</md-icon>
@@ -107,7 +126,7 @@
                         <div ng-controller="ToolbarController">
 
                           <div class="md-media-lg card-media md-padding">
-                            <input type="file" id="file" name="file" accept=".png,.gif,.jpeg,.bmp,.doc,.docx,.xls,.xlsx,.pdf" onchange="angular.element(this).scope().getFileDetails(this)" />
+                            <input type="file" id="file" name="file" accept=".png,.gif,.jpeg,.bmp,.doc,.docx,.xls,.xlsx,.pdf,.dwg,.dxf,.eml,.msg" onchange="angular.element(this).scope().getFileDetails(this)" />
 
                             <md-button class="md-raised md-primary" ng-click="uploadFiles()">
                               <md-icon md-menu-origin md-menu-align-target>file_upload</md-icon>
