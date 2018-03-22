@@ -188,6 +188,8 @@ namespace Metadata_Editor_Modren_UI
                     result.Content.Headers.ContentType =
                         new MediaTypeHeaderValue("application/octet-stream");
 
+                    original.Close();
+                    File.Delete(Utils._storagePath + "\\Cleaned_" + file);
                     return result;
                 }
             }

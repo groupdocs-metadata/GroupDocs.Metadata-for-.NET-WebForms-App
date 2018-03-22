@@ -10,12 +10,16 @@ GroupDocs.Metadata for .NET - ASP.Net WebForms Document Metadata Editor App prov
 + View Images (JPG, JPEG, GIF, Png) Metadata & XMP data information
 + View Spreadsheet Metadata information
 + View PDF file Metadata information
++ View CAD (DWG, DXF) file Metadata information
++ View Email (EML, MSG) file Metadata information
 + Download original file
 + Upload supported format file
 + Select uploaded documents from the list
 + Select Next and Previous document from uploaded document list
 + Clean Metadata (Basic, XMP, Custom Fields, Revisions, Comments) information
 + Download updated, cleaned metadata file
++ Export Metadata to Excel and download XLSX file
++ Export Metadata to CSV and download CSV file
 + Responsive & clean UI using AngularJS
     
 # Pre-Requisites
