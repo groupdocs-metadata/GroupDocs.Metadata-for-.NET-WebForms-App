@@ -13,6 +13,8 @@ using GroupDocs.Metadata.Formats.Image;
 using System.Net.Http;
 using System.Net;
 using System.Net.Http.Headers;
+using GroupDocs.Metadata.Formats.Email;
+using GroupDocs.Metadata.Formats.Cad;
 
 namespace Metadata_Editor_Modren_UI
 {
@@ -113,6 +115,44 @@ namespace Metadata_Editor_Modren_UI
 
                             break;
 
+                        case DocumentType.Msg:
+
+                            OutlookMessage outlookMessage = new OutlookMessage(original);
+                            outlookMessage.CleanMetadata();
+                            outlookMessage.RemoveAttachments();
+
+                            outlookMessage.Save(Utils._storagePath + "\\Cleaned_" + file);
+
+                            break;
+
+                        case DocumentType.Eml:
+
+                            EmlFormat emlFormat = new EmlFormat(original);
+                            emlFormat.CleanMetadata();
+                            emlFormat.RemoveAttachments();
+
+                            emlFormat.Save(Utils._storagePath + "\\Cleaned_" + file);
+
+                            break;
+
+                        case DocumentType.Dwg:
+
+                            DwgFormat dwgFormat = new DwgFormat(original);
+                            dwgFormat.CleanMetadata();
+
+                            dwgFormat.Save(Utils._storagePath + "\\Cleaned_" + file);
+
+                            break;
+
+                        case DocumentType.Dxf:
+
+                            DxfFormat dxfFormat = new DxfFormat(original);
+                            dxfFormat.CleanMetadata();
+
+                            dxfFormat.Save(Utils._storagePath + "\\Cleaned_" + file);
+
+                            break;
+
                         default:
 
                             DocFormat defaultDocFormat = new DocFormat(original);
@@ -141,13 +181,15 @@ namespace Metadata_Editor_Modren_UI
                         Content = new ByteArrayContent(ms.ToArray())
                     };
                     result.Content.Headers.ContentDisposition =
-                        new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
-                        {
-                            FileName = "Cleaned_" + file
-                        };
+                    new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = "Cleaned_" + file
+                    };
                     result.Content.Headers.ContentType =
                         new MediaTypeHeaderValue("application/octet-stream");
 
+                    original.Close();
+                    File.Delete(Utils._storagePath + "\\Cleaned_" + file);
                     return result;
                 }
             }

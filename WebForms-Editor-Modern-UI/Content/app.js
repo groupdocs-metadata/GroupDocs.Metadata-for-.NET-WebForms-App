@@ -43,6 +43,10 @@ ngApp.controller('ToolbarController', function ToolbarController($rootScope, $sc
             });
     };
 
+    $scope.openMenu = function ($mdOpenMenu, ev) {
+        $mdOpenMenu(ev);
+    };
+
     function DialogController($scope, $mdDialog) {
         $scope.hide = function () {
             $mdDialog.hide();

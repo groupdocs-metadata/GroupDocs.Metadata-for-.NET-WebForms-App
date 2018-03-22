@@ -11,6 +11,8 @@ using System.Data;
 using GroupDocs.Metadata.Formats.Image;
 using GroupDocs.Metadata.Xmp;
 using GroupDocs.Metadata.Formats.Document;
+using GroupDocs.Metadata.Formats.Email;
+using GroupDocs.Metadata.Formats.Cad;
 
 namespace Metadata_Editor_Modren_UI
 {
@@ -20,7 +22,7 @@ namespace Metadata_Editor_Modren_UI
         {
             try
             {
-                FileStream original = File.OpenRead(Utils._storagePath + "\\" + file);
+                FileStream original = File.Open(Utils._storagePath + "\\" + file, FileMode.OpenOrCreate);
                 FileFormatChecker fileFormatChecker = new FileFormatChecker(original);
 
                 DocumentType documentType = fileFormatChecker.GetDocumentType();
@@ -83,6 +85,30 @@ namespace Metadata_Editor_Modren_UI
 
                             break;
 
+                        case DocumentType.Msg:
+
+                            OutlookMessage outlookMessage = new OutlookMessage(original);
+                            values = AppendMetadata(outlookMessage.GetMsgInfo(), values);
+                            break;
+
+                        case DocumentType.Eml:
+
+                            EmlFormat emlFormat = new EmlFormat(original);
+                            values = AppendMetadata(emlFormat.GetEmlInfo(), values);
+                            break;
+
+                        case DocumentType.Dwg:
+
+                            DwgFormat dwgFormat = new DwgFormat(original);
+                            values = AppendMetadata(dwgFormat.GetMetadata(), values);
+                            break;
+
+                        case DocumentType.Dxf:
+
+                            DxfFormat dxfFormat = new DxfFormat(original);
+                            values = AppendMetadata(dxfFormat.GetMetadata(), values);
+                            break;
+
                         default:
 
                             DocFormat defaultDocFormat = new DocFormat(original);
@@ -113,6 +139,56 @@ namespace Metadata_Editor_Modren_UI
                     if (metadataPropert.Value != null)
                     {
                         values.Add(new PropertyItem(metadataPropert.Name, metadataPropert.Value.ToString(), metadataPropert.IsBuiltInProperty));
+                    }
+                }
+            }
+
+            return values;
+        }
+
+        private List<PropertyItem> AppendMetadata(OutlookMessageMetadata metadataArray, List<PropertyItem> values)
+        {
+            foreach (MetadataProperty metadataPropert in metadataArray)
+            {
+                if (metadataPropert.Value != null)
+                {
+                    if (!metadataPropert.Value.Type.ToString().Equals("StringArray"))
+                    {
+                        values.Add(new PropertyItem(metadataPropert.Name, metadataPropert.Value.ToString(), metadataPropert.IsBuiltInProperty));
+                    }
+                    else
+                    {
+                        string strValues = "[" + metadataPropert.Value.ToStringArray().Count().ToString() + "] - ";
+                        foreach (string str in metadataPropert.Value.ToStringArray())
+                        {
+                            strValues += str + " ,";
+                        }
+                        values.Add(new PropertyItem(metadataPropert.Name, strValues.Trim(','), metadataPropert.IsBuiltInProperty));
+                    }
+                }
+            }
+
+            return values;
+        }
+
+        private List<PropertyItem> AppendMetadata(EmlMetadata metadataArray, List<PropertyItem> values)
+        {
+            foreach (MetadataProperty metadataPropert in metadataArray)
+            {
+                if (metadataPropert.Value != null)
+                {
+                    if (!metadataPropert.Value.Type.ToString().Equals("StringArray"))
+                    {
+                        values.Add(new PropertyItem(metadataPropert.Name, metadataPropert.Value.ToString(), metadataPropert.IsBuiltInProperty));
+                    }
+                    else
+                    {
+                        string strValues = "[" + metadataPropert.Value.ToStringArray().Count().ToString() + "] - ";
+                        foreach (string str in metadataPropert.Value.ToStringArray())
+                        {
+                            strValues += str + " ,";
+                        }
+                        values.Add(new PropertyItem(metadataPropert.Name, strValues.Trim(','), metadataPropert.IsBuiltInProperty));
                     }
                 }
             }

@@ -36,7 +36,7 @@ namespace Metadata_Editor_Modren_UI.Controllers
                     };
                 result.Content.Headers.ContentType =
                     new MediaTypeHeaderValue("application/octet-stream");
-
+                original.Close();
                 return result;
             }
         }
